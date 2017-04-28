@@ -1,11 +1,24 @@
 #
 # Ubuntu Dockerfile
 #
-# https://github.com/dockerfile/ubuntu
+# Forked from: https://github.com/dockerfile/ubuntu
 #
 
-FROM ubuntu:12.10
+# Pull base image.
+FROM ubuntu:16.04
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu quantal main universe multiverse" > /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get upgrade -y
+# Install.
+RUN \
+  apt-get update && \
+  apt-get -y upgrade && \
+  apt-get install -y redis-server redis-sentinel redis-tools && \
+  rm -rf /var/lib/apt/lists/*
+
+# Set environment variables.
+ENV HOME /root
+
+# Define working directory.
+WORKDIR /root
+
+# Define default command.
+CMD ["redis-server"]
